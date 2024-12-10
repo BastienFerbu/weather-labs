@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Local run
 
-First, run the development server:
+First, create a `.env` file with `WEATHER_API_KEY` variable and run the development server:
 
 ```bash
 npm run dev
