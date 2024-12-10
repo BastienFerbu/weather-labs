@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { API_KEY } from "../constant";
 import { Forecast } from '../../types/weather';
-import { get } from 'http';
 
 export const GET = async (
   req: Request
@@ -22,8 +21,11 @@ export const GET = async (
 
     if (response.ok) {
       const data = await response.json();
-      var forecast = computeForecast(data);
+      const forecast = computeForecast(data);
       return NextResponse.json(forecast, { status: 200 });
+    } else {
+      const data = await response.json();
+      return NextResponse.json(data, { status: 500 });
     }
   } catch (error) {
     console.log(error);

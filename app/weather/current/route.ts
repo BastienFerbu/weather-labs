@@ -29,6 +29,9 @@ export const GET = async (
         humidity: data.data[0].rh,
       };
       return NextResponse.json(weather, { status: 200 });
+    } else {
+      const data = await response.json();
+      return NextResponse.json(data, { status: 500 });
     }
   } catch (error) {
     console.log(error);

@@ -41,6 +41,7 @@ export default function Home() {
   const [weather, setWeather] = useState({} as Weather);
   const [forecast, setForecast] = useState({} as Forecast);
   const [city, setCity] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const getWeather = async (e: React.SyntheticEvent, route: string) => {
     e.preventDefault();
@@ -51,9 +52,8 @@ export default function Home() {
         `/weather/${route}?city=${encodeURI(city)}&lang=${lang}`, {
         method: "GET",
       });
-      if (response.ok) {
+      if (response.ok && response.status == 200) {
         const data = await response.json();
-        console.log(data);
         if(route == "forecast") {
           setForecast(data);
           setWeather({} as Weather);
@@ -62,9 +62,14 @@ export default function Home() {
           setWeather(data);
           setForecast({} as Forecast);
         }
+        setErrorMessage("");
+      } else {
+        const data = await response.json();
+        setErrorMessage(data.error);
       }
     } catch (error) {
       console.log(error);
+      setErrorMessage(`Error: ${error}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -143,6 +148,11 @@ export default function Home() {
           <div className="text-sm/6">
             <span className="font-bold">
               {lang == "fr" ? "Echelle de vent" : "Wind scale"}</span>: {windScale(lang, forecast.windScale)}
+          </div>
+        </div> }
+        { errorMessage != "" && <div className="mt-4">
+          <div className="text-sm/6">
+            <span className="font-bold text-red-800">{errorMessage}</span>
           </div>
         </div> }
       </main>
